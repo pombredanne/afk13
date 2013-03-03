@@ -1,0 +1,195 @@
+from django.db import models
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser
+
+from mptt.models import MPTTModel
+from mptt.managers import TreeManager
+from mptt.models import TreeForeignKey
+from polymorphic.models import PolymorphicModel
+from polymorphic.manager import PolymorphicManager
+
+from utils import render_to_template
+
+
+class UserManager(BaseUserManager):
+
+    def create_user(self, username, password=None):
+        user = self.model(username=username)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, password):
+        user = self.create_user(username, password=password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class User(AbstractBaseUser):
+    email = models.EmailField(max_length=40, unique=True, db_index=True)
+    username = models.CharField(max_length=40, unique=True, db_index=True)
+
+    USERNAME_FIELD = 'username'
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def __unicode__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
+
+
+# MenuEntry base class
+
+class MPTTPolymorphicManager(TreeManager, PolymorphicManager):
+    pass
+
+
+class MenuEntry(MPTTModel, PolymorphicModel):
+    name = models.CharField(max_length=255)
+    position = models.PositiveIntegerField()
+    slug = models.SlugField(max_length=255)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+
+    objects = MPTTPolymorphicManager()
+
+    class MPTTMeta:
+        order_insertion_by = ['position']
+
+    def __unicode__(self):
+        return self.name
+
+
+class PathRedirect(MenuEntry):
+    path = models.CharField(max_length=255)
+
+    def get_absolute_url(self):
+        return reverse('redirect', kwargs=dict(slug=self.slug))
+
+
+# Rubrique, Publication & Article
+
+
+class Rubrique(MenuEntry):
+
+    right_column = models.ManyToManyField('Brick', related_name='rubrique_right_column_set', blank=True, null=True)
+    left_column = models.ManyToManyField('Brick', related_name='rubrique_left_column_set', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('rubrique', kwargs=dict(slug=self.slug))
+
+    def publications(self):
+        rubriques_ids = [e[0] for e in self.get_descendants().values_list('pk')]
+        rubriques_ids.append(self.pk)
+        publications = Publication.objects.filter(rubrique__in=rubriques_ids)
+        publications.order_by('created_at')
+        return publications
+
+
+class Publication(models.Model):
+    content = models.ForeignKey('BaseContent')
+    rubrique = models.ForeignKey(Rubrique)
+
+    created_at = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
+
+    call_title = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return unicode(self.content) + ' published in ' + unicode(self.rubrique) + ' as ' + self.call_title
+
+
+class BaseContent(PolymorphicModel):
+
+    supertitle = models.CharField(max_length=255, blank=True, null=True)
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True, null=True)
+
+    authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True)
+    author_line = models.CharField(max_length=255, null=True, blank=True)
+
+    publications = models.ManyToManyField(Rubrique, through=Publication)
+
+    slug = models.SlugField(max_length=255)
+
+    created_at = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
+
+    right_column = models.ManyToManyField('Brick', related_name='content_right_column_set', blank=True, null=True)
+    left_column = models.ManyToManyField('Brick', related_name='content_left_column_set', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class Article(BaseContent):
+    body = models.TextField()
+
+    def render(self):
+        return render_to_template('base/article.html', dict(article=self))
+
+
+# Models for Mansonry view
+
+
+class Brick(PolymorphicModel):
+    position = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(blank=True, null=True)
+    span = models.PositiveIntegerField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['position']
+
+    def __unicode__(self):
+        return self.title
+
+
+class Masonry(MenuEntry):
+    bricks = models.ManyToManyField(Brick)
+    template_name = models.CharField(max_length=255)
+
+    def get_absolute_url(self):
+        return reverse('masonry', kwargs=dict(slug=self.slug))
+
+
+class TextWithLink(Brick):
+    text = models.TextField()
+    url = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.title
+
+    def render(self):
+        return render_to_template('base/brick/text_with_link.html', dict(brick=self))

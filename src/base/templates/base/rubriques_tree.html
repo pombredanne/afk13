@@ -1,0 +1,19 @@
+{% load mptt_tags %}
+
+{% with descendants=root.get_descendants %}
+    {% if descendants %}
+        <h2>{% if root.get_descendant_count == 1 %}Rubrique{% else %}Rubriques{% endif %}</h2>
+        <ul class="rubrique-tree">
+            {% recursetree descendants %}
+                <li {% if rubrique == node %}class="active"{% endif %}>
+                    <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+                    {% if not node.is_leaf_node %}
+                        <ul class="children">
+                            {{ children }}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endrecursetree %}
+        </ul>
+    {% endif %}
+{% endwith %}

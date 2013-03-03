@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>AFK 13</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/static/css/sublime.css" rel="stylesheet">
+        {% block header %}{% endblock %}
+    </head>
+    <body class="admin {% block bodyclass %}{% endblock %}">
+        <div class="container">
+            <div class="hero-unit">
+                <h1>AFK 13 - Administration</h1>
+                <p>Association Franco-Kabyle des Bouches-du-Rhônes</p>
+            </div>
+
+            <div class=row>
+                {% include "compositeadmin/blocks/breadcrumb.html" with breadcrumb=breadcrumb %}
+            </div>
+            {% if messages %}
+                <div class=row>
+                    {% for message in messages %}
+                        <div class="alert">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block container %}
+                {% for composite in composites %}
+                    {{ composite|safe }}
+                {% endfor %}
+            {% endblock %}
+
+        </div>
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/bootstrap.js"></script>
+        {% block extrabody %}
+        {% endblock %}
+    </body>
+</html>

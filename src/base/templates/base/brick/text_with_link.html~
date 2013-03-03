@@ -1,0 +1,6 @@
+<a href="{{ brick.url }}">
+    <div class="{{ brick.classes }}">
+        <h2>{{ brick.title }}</h2>
+        {{ brick.text }}
+    </div>
+</a>

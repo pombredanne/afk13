@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+    <div class=row>
+        <div class="span12 social-login">
+            <div class="alert alert-info">
+                <div>
+                    Facebook, Google et Twitter sont supporté, si vous avez un compte sur l'un de ses sites
+                    vous pouvez vous logguez à l'aide de leurs services.
+                </div>
+                <div class="row">
+                    <ul>
+                        <li><a href="" >S'identifier avec Twitter</a></li>
+                        <li><a href="" >S'identifier avec Google</a></li>
+                        <li><a href="" >S'identifier avec Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=row>
+        <div class="span12 afk13-login">
+            <div class="alert">
+                <div>
+                    Vous n'avez pas de compte sur l'un des sites ci-dessus ou vous ne souhaitez pas les utiliser.
+                </div>
+                <ul>
+                    <li><a href="" >S'identifier</a></li>
+                    <li><a href="" >Créer un compte</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

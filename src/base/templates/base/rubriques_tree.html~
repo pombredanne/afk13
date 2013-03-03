@@ -1,0 +1,11 @@
+<ul>
+    {% for subrubrique in rubriques %}
+    <li {% if subrubrique == rubrique %}class="active"{% endif %}>
+        {{ rubrique.name }}
+        {% with subrubriques=subrubrique.get_children %}
+            {% if subrubriques %}
+                {% include "base/rubriques_tree.html" with rubriques=subrubriques %}
+            {% endif %}
+        {% endwith %}
+    </li>
+</ul>

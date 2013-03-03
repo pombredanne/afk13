@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class=row>
+        {% include "compositeadmin/blocks/breadcrumb.html" with breadcrumb=breadcrumb %}
+    </div>
+    {% if messages %}
+        <div class=row>
+            {% for message in messages %}
+                <div class="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% block container %}
+        {% for composite in composites %}
+            {{ composite|safe }}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}

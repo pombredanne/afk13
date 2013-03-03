@@ -1,0 +1,52 @@
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
+
+from models import MenuEntry
+from models import BaseContent
+from models import Masonry as MasonryModel
+from models import Rubrique as RubriqueModel
+
+class Base(TemplateView):
+
+    def menu(self):
+        if not hasattr(self, '_menu'):
+            self._menu = MenuEntry.objects.all().order_by('position').filter(parent__isnull=True)
+        return self._menu
+
+
+class Masonry(Base):
+
+    def masonry(self):
+        if not hasattr(self, '_masonry'):
+            self._masonry = get_object_or_404(MasonryModel, slug=self.kwargs['slug'])
+        return self._masonry
+
+    def get_context_data(self, *args, **kwargs):
+        menu = self.menu()
+        masonry = self.masonry()
+        return dict(menu=menu, masonry=masonry)
+
+    @property
+    def template_name(self):
+        return self.masonry().template_name
+
+
+class Rubrique(Base):
+
+    template_name = 'base/rubrique.html'
+
+    def get_context_data(self, *args, **kwargs):
+        menu = self.menu()
+        rubrique = get_object_or_404(RubriqueModel, slug=self.kwargs['slug'])
+        root = rubrique.get_root()
+        return dict(root=root, rubrique=rubrique, menu=menu)
+
+
+class Content(Base):
+
+    template_name = 'base/content.html'
+
+    def get_context_data(self, *args, **kwargs):
+        menu = self.menu()
+        content = get_object_or_404(BaseContent, slug=self.kwargs['slug'])
+        return dict(menu=menu, content=content)

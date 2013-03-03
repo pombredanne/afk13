@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>AFK 13</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/static/css/sublime.css" rel="stylesheet">
+    </head>
+
+    <body class="{{ masonry.body_class }}">
+        {% include "journal/include/navbar.html" %}
+        <div class="container">
+            <div class="hero-unit">
+                <h1>AFK 13</h1>
+                <p>Association Franco-Kabyle des Bouches-du-Rhônes</p>
+            </div>
+        </div>
+
+        <div class=container>
+            {% regroup_per_rows masonry.bricks.all %}
+            {% for row in rows %}
+                <div class="row">
+                    {% for brick in row %}
+                        {{ brick.render|safe }}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/bootstrap.js"></script>
+    </body>
+</html>

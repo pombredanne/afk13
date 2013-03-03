@@ -1,0 +1,22 @@
+{% extends "compositeadmin/base.html" %}
+
+
+{% block container %}
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+        {% for field in form %}
+            <div class="control-group">
+                <label class="control-label" for="{{ field.id_for_label }}">
+                    {% if field.field.required %}
+                        <b>{{ field.label }}</b>
+                    {% else %}
+                        {{ field.label }}
+                    {% endif %}
+                </label>
+                <div class="controls">
+                    {{ field }}
+                </div>
+            </div>
+        {% endfor %}
+        <input type="submit" value="save" class="btn"/>
+    </form>
+{% endblock %}
