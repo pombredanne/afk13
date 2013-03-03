@@ -1,0 +1,15 @@
+[submodule "composite"]
+path = deps/django-composite
+url = git://github.com/django-composite/django-composite.git
+[submodule "admin"]
+path = deps/django-composite-admin
+url = git://github.com/django-composite/django-composite-admin.git
+[submodule "django"]
+path = deps/django
+url = git://github.com/django/django.git
+[submodule "mptt"]
+path = deps/django-mptt
+url = git://github.com/django-mptt/django-mptt.git
+[submodule "polymorphic"]
+path = deps/dspq
+url = https://github.com/amirouche/Django-Simple-Polymorphic-Querysets.git
