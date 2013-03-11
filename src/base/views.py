@@ -13,7 +13,7 @@ class Base(TemplateView):
 
     def menu(self):
         if not hasattr(self, '_menu'):
-            self._menu = MenuEntry.objects.all().order_by('position').filter(parent__slug='AFK13')
+            self._menu = MenuEntry.objects.all().order_by('position').filter(parent__slug='AFK13')  # FIXME
         return self._menu
 
     def get_context_data(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class Rubrique(Base):
     def get_context_data(self, *args, **kwargs):
         menu = self.menu()
         rubrique = get_object_or_404(RubriqueModel, slug=self.kwargs['slug'])
-        root = rubrique.get_root()
+        root = rubrique
         return dict(root=root, rubrique=rubrique, menu=menu)
 
 

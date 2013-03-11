@@ -37,3 +37,23 @@ body.login .social-login > div > div, body.login .afk13-login > div > div {
 body.login .social-login ul, body.login .afk13-login ul {
     list-style: none;
 }
+
+body.accueil .actualite > div, body.accueil .ateliers > div, body.accueil .programme > div  {
+    background-color: #D9EDF7;
+    border-color: #BCE8F1;
+    color: #3A87AD;
+    border-radius: 4px 4px 4px 4px;
+    padding: 8px 35px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+}
+
+body.accueil .histoire > div, body.accueil .patrimoine > div, body.accueil .mediatheque > div  {
+    background-color: #DFF0D8;
+    border-color: #D6E9C6 1px solid;
+    color: #468847;
+    border-radius: 4px 4px 4px 4px;
+    padding: 8px 35px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+}

@@ -82,7 +82,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 't_@llr-+#&amp;7-4+o6852u_hvhvc6yk+-6dy89%gtpocepz+mh3@'
+SECRET_KEY = 't_@llr-+#&amp;7-4+o6852u_hvhvc6yqsdfmlkqsKdddddddddflks+-6dy89qqqqqqqqqdmlfksldmfk%Gtpocepzlllllllllksdqf+Mh3mmmmmmmmmlk@'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -127,7 +127,6 @@ INSTALLED_APPS = (
     'polymorphic',
     'composite',
     'mptt',
-    'social_auth',
     'composite',
     'compositeadmin',
 
@@ -165,34 +164,6 @@ LOGGING = {
 }
 
 
-AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.twitter.TwitterBackend',
-    'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleOAuth2Backend',
-    'social_auth.backends.google.GoogleBackend',
-    'social_auth.backends.yahoo.YahooBackend',
-    'social_auth.backends.browserid.BrowserIDBackend',
-    # 'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    # 'social_auth.backends.contrib.disqus.DisqusBackend',
-    # 'social_auth.backends.contrib.livejournal.LiveJournalBackend',
-    # 'social_auth.backends.contrib.orkut.OrkutBackend',
-    # 'social_auth.backends.contrib.foursquare.FoursquareBackend',
-    # 'social_auth.backends.contrib.github.GithubBackend',
-    # 'social_auth.backends.contrib.vkontakte.VKontakteBackend',
-    # 'social_auth.backends.contrib.live.LiveBackend',
-    # 'social_auth.backends.contrib.skyrock.SkyrockBackend',
-    # 'social_auth.backends.contrib.yahoo.YahooOAuthBackend',
-    # 'social_auth.backends.contrib.readability.ReadabilityBackend',
-    'social_auth.backends.OpenIDBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-TWITTER_CONSUMER_KEY = 'iJqcHcmX3vrYqhJgtJBHMQ'
-TWITTER_CONSUMER_SECRET = 'lRGI0fedwa0WmHNRtWUDyaszrz1uQ7jCOnnmdYSP3s'
-FACEBOOK_APP_ID = ''
-FACEBOOK_API_SECRET = ''
-GOOGLE_OAUTH2_CLIENT_ID = ''
-GOOGLE_OAUTH2_CLIENT_SECRET = ''
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'

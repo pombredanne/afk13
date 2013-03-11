@@ -14,7 +14,7 @@
         <link href="/static/css/sublime.css" rel="stylesheet">
     </head>
 
-    <body class="{{ masonry.body_class }}">
+    <body class="{{ masonry.slug }}">
         {% include "journal/include/navbar.html" %}
         <div class="container">
             <div class="hero-unit">
@@ -22,7 +22,6 @@
                 <p>Association Franco-Kabyle des Bouches-du-Rhônes</p>
             </div>
         </div>
-
         <div class=container>
             {% regroup_per_rows masonry.bricks.all %}
             {% for row in rows %}
